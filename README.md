@@ -20,10 +20,12 @@ touchscreen with an ESP32-S3 (8 MB PSRAM, 16 MB flash) and Wi-Fi on the back. US
 power. Stats, pairing, settings and firmware updates all go over Wi-Fi, and several PCs can
 share one display.
 
-<p align="center">
-  <img src="docs/images/esp32-s3-touch-lcd-7b.png" alt="Waveshare ESP32-S3-Touch-LCD-7B running DeskHUD" width="560"><br>
-  <sub>The ESP32-S3-Touch-LCD-7B running DeskHUD (Newsprint theme).</sub>
-</p>
+<table>
+<tr>
+<td width="50%" align="center"><img src="docs/images/deskhud-case.png" alt="DeskHUD in its 3D-printed case on the desk stand"><br><sub>In the 3D-printed case and stand (render).</sub></td>
+<td width="50%" align="center"><img src="docs/images/esp32-s3-touch-lcd-7b.png" alt="Waveshare ESP32-S3-Touch-LCD-7B running DeskHUD"><br><sub>The bare board running DeskHUD (Newsprint theme).</sub></td>
+</tr>
+</table>
 
 ## Screens
 
@@ -101,6 +103,11 @@ never becomes the data source. You can install firmware updates from here too.
 If you want to put it on a desk or a wall, there's a 3D-printable case with an optional stand on
 MakerWorld:
 [**Waveshare ESP32-S3-Touch-LCD-7B case + stand**](https://makerworld.com/en/models/3383231-waveshare-esp32-s3-touch-lcd-7b-case-stand#profileId-3849570).
+
+<p align="center">
+  <img src="docs/images/case-and-stand.png" alt="The stand and the case, rendered from the STL files" width="700"><br>
+  <sub>The stand and the case, rendered from the STL files.</sub>
+</p>
 
 - **Fit**: designed from Waveshare's official 3D model for the touch version (192.96 × 110.76 mm glass). The glass sits flush in a pocket, and the display is held by its own metal bracket.
 - **Openings**:
