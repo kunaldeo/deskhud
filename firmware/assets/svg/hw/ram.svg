@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+ <defs>
+  <linearGradient id="b" x1="2" y1="12" x2="46" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#22D3EE"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+  <linearGradient id="chip" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1E293B"/><stop offset="1" stop-color="#0F172A"/></linearGradient>
+ </defs>
+ <rect x="2" y="12" width="44" height="22" rx="4" fill="url(#b)"/>
+ <path d="M22 34h4v-3h-4z" fill="#0F172A" opacity=".35"/>
+ <g fill="url(#chip)"><rect x="6" y="16" width="8" height="11" rx="2"/><rect x="16" y="16" width="8" height="11" rx="2"/><rect x="26" y="16" width="8" height="11" rx="2"/><rect x="36" y="16" width="6" height="11" rx="2"/></g>
+ <g fill="#FCD34D"><rect x="5" y="34" width="2.4" height="4" rx=".8"/><rect x="9.5" y="34" width="2.4" height="4" rx=".8"/><rect x="14" y="34" width="2.4" height="4" rx=".8"/><rect x="18.5" y="34" width="2.4" height="4" rx=".8"/><rect x="27" y="34" width="2.4" height="4" rx=".8"/><rect x="31.5" y="34" width="2.4" height="4" rx=".8"/><rect x="36" y="34" width="2.4" height="4" rx=".8"/><rect x="40.5" y="34" width="2.4" height="4" rx=".8"/></g>
+</svg>

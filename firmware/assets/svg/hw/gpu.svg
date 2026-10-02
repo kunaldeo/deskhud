@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+ <defs>
+  <linearGradient id="b" x1="4" y1="10" x2="44" y2="38" gradientUnits="userSpaceOnUse"><stop stop-color="#34D399"/><stop offset="1" stop-color="#0E9F6E"/></linearGradient>
+  <radialGradient id="f" cx="0" cy="0" r="1" gradientTransform="translate(17 24) scale(9)" gradientUnits="userSpaceOnUse"><stop stop-color="#1F2937"/><stop offset="1" stop-color="#0B1220"/></radialGradient>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#C7F9E5"/><stop offset="1" stop-color="#6EE7B7"/></linearGradient>
+ </defs>
+ <rect x="4" y="38" width="20" height="4" rx="1.5" fill="#F5B400"/>
+ <rect x="2" y="10" width="44" height="28" rx="6" fill="url(#b)"/>
+ <circle cx="17" cy="24" r="10" fill="url(#f)"/>
+ <g fill="url(#g)"><path d="M17 15a3 3 0 0 1 3 4l-3 5-3-5a3 3 0 0 1 3-4z"/><path d="M17 15a3 3 0 0 1 3 4l-3 5-3-5a3 3 0 0 1 3-4z" transform="rotate(120 17 24)"/><path d="M17 15a3 3 0 0 1 3 4l-3 5-3-5a3 3 0 0 1 3-4z" transform="rotate(240 17 24)"/></g>
+ <circle cx="17" cy="24" r="2.2" fill="#ECFDF5"/>
+ <rect x="31" y="16" width="10" height="3" rx="1.5" fill="#ECFDF5" opacity=".9"/>
+ <rect x="31" y="22.5" width="10" height="3" rx="1.5" fill="#ECFDF5" opacity=".65"/>
+ <rect x="31" y="29" width="7" height="3" rx="1.5" fill="#ECFDF5" opacity=".4"/>
+</svg>

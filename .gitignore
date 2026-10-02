@@ -1,0 +1,10 @@
+firmware/build/
+firmware/managed_components/
+firmware/sdkconfig
+firmware/sdkconfig.old
+monitor/target/
+sample-code/
+firmware/tools/.fontcache/
+.vscode/
+# third-party datasheets: kept locally, not redistributed (links in README)
+docs/vendor/

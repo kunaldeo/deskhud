@@ -1,0 +1,31 @@
+[package]
+name = "deskhud"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.90"
+description = "DeskHUD monitoring service: streams PC stats and coding-agent activity to the DeskHUD Wi-Fi display"
+license = "Apache-2.0"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4.6", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+toml = "1"
+tungstenite = "0.30"
+mdns-sd = "0.21"
+nvml-wrapper = "0.13"
+jiff = "0.2"
+uuid = { version = "1", features = ["v4"] }
+rustix = { version = "1", features = ["fs", "param"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true

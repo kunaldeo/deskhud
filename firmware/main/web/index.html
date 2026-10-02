@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DeskHUD</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%2338bdf8'/%3E%3Cstop offset='.55' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%23c026d3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 21l5-6 4 3 7-8' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#070a12;--card:rgba(17,23,39,.82);--field:#0c1120;--line:#232d45;--line2:#1b2338;--text:#e8ecf6;--text2:#9aa4bd;--text3:#5f6883;--accent:#7aa2f7;--on-accent:#0b0f1a;--ok:#9ece6a;--warn:#ff9e64;--err:#f7768e;--r:18px}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--bg);
+ background-image:radial-gradient(55% 45% at 8% -5%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%),radial-gradient(45% 40% at 100% 0%,#581c8740,transparent 70%),radial-gradient(60% 45% at 60% 110%,#0e749033,transparent 70%);background-attachment:fixed;-webkit-font-smoothing:antialiased}
+main{max-width:1080px;margin:0 auto;padding:32px 20px 56px}
+header{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.logo{width:48px;height:48px;border-radius:14px;flex:none;background:linear-gradient(135deg,#38bdf8,#6366f1 55%,#c026d3);display:grid;place-items:center;box-shadow:0 10px 30px #6366f140}
+.logo svg{width:26px;height:26px}
+.title{min-width:0;flex:1}
+h1{font-size:24px;line-height:1.2;margin:0;font-weight:650;letter-spacing:-.015em}
+.sub{color:var(--text2);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:13px;color:var(--text2);white-space:nowrap}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+.status.off i{background:var(--warn);box-shadow:0 0 10px var(--warn);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px 22px;backdrop-filter:blur(14px)}
+.card h2{margin:0 0 16px;font-size:16px;font-weight:620;display:flex;align-items:center;gap:10px}
+.card h2 .ic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;flex:none}
+.card h2 .ic svg{width:16px;height:16px}
+.field{display:flex;flex-direction:column;gap:9px;padding:12px 0;border-top:1px solid var(--line2)}
+.field:first-of-type{border-top:0;padding-top:0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:28px}
+.row>label,.lbl{color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.val{font-variant-numeric:tabular-nums;color:var(--text);font-weight:550}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;margin:6px 0;
+ background:linear-gradient(90deg,var(--accent) var(--p,50%),#232b40 var(--p,50%));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 8px #0008;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 2px 8px #0008;cursor:pointer}
+.seg{display:flex;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1 1 0;min-width:0;border:0;background:transparent;color:var(--text2);padding:7px 6px;border-radius:9px;font-family:inherit;font-size:13.5px;font-weight:500;line-height:1.2;white-space:nowrap;cursor:pointer;transition:background .15s,color .15s}
+.seg button:hover{color:var(--text)}
+.seg button.on{background:var(--accent);color:var(--on-accent);font-weight:600}
+.seg.small{display:inline-flex;min-width:120px}
+.switch{position:relative;width:46px;height:26px;flex:none}
+.switch input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.switch span{position:absolute;inset:0;background:#2a3350;border-radius:13px;transition:.2s}
+.switch span:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 4px #0006}
+.switch input:checked+span{background:var(--accent)}
+.switch input:checked+span:before{transform:translateX(20px)}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.swatch{width:30px;height:30px;border-radius:50%;border:0;cursor:pointer;padding:0;outline:2px solid transparent;outline-offset:3px;transition:outline-color .15s}
+.swatch.on{outline-color:var(--text)}
+.swatch.custom{position:relative;overflow:hidden;background:conic-gradient(#f87171,#fbbf24,#34d399,#38bdf8,#a78bfa,#f472b6,#f87171)}
+.swatch.custom input{position:absolute;inset:-6px;opacity:0;cursor:pointer}
+input[type=text],select{width:100%;background:var(--field);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 11px;font:inherit;outline:none}
+input[type=text]:focus,select:focus{border-color:var(--accent)}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text2) 50%),linear-gradient(135deg,var(--text2) 50%,transparent 50%);background-position:calc(100% - 17px) 55%,calc(100% - 12px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+.btn{border:1px solid var(--line);background:#1a2236;color:var(--text);border-radius:11px;padding:8px 14px;font-family:inherit;font-size:14px;font-weight:500;line-height:1.2;cursor:pointer;white-space:nowrap;transition:background .15s}
+.btn:hover{background:#222b42}
+.btn.primary{background:var(--accent);border-color:transparent;color:var(--on-accent);font-weight:600}
+.btn.danger{color:var(--err)}
+.btn:disabled{opacity:.5;cursor:default}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.pc{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line2);border-radius:14px;background:#0f1525}
+.pc+.pc{margin-top:8px}
+.pc .dot{width:10px;height:10px;border-radius:50%;background:var(--text3);flex:none}
+.pc .dot.on{background:var(--ok);box-shadow:0 0 10px var(--ok)}
+.pc .name{flex:1;min-width:0}
+.pc .name b{display:block;font-weight:560;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc .name small{color:var(--text3);font-size:12.5px}
+.pc .name small.live{color:var(--ok)}
+.pc .btns .btn{padding:6px 11px;font-size:13px}
+.hint{color:var(--text3);font-size:13px;margin:4px 0 0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
+.kv span{color:var(--text2);white-space:nowrap}
+.kv b{font-weight:500;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.drop{border:1.5px dashed var(--line);border-radius:14px;padding:16px;text-align:center;color:var(--text2);cursor:pointer;transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.drop b{color:var(--text)}
+.bar{height:6px;background:#232b40;border-radius:3px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#818cf8,#e879f9);transition:width .2s}
+#gate{position:fixed;inset:0;display:grid;place-items:center;background:#070a12f0;z-index:9;padding:20px}
+#gate .card{max-width:440px;width:100%;text-align:center;padding:32px}
+#gate h2{justify-content:center;font-size:20px}
+#gate p{color:var(--text2);margin:0}
+#gate .code{font:600 34px ui-monospace,monospace;letter-spacing:.14em;color:var(--accent);margin-top:14px}
+.hidden{display:none!important}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,10px);background:#1a2236;border:1px solid var(--line);border-radius:12px;padding:10px 16px;opacity:0;transition:.2s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div id="gate"><div class="card"><h2 id="gate-title">Connecting…</h2><p id="gate-text">Reaching the display.</p><div class="code hidden" id="gate-code"></div></div></div>
+<main>
+<header>
+ <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-6 4 3 7-8"/></svg></div>
+ <div class="title"><h1 id="dev-name">DeskHUD</h1><div class="sub" id="dev-sub">&nbsp;</div></div>
+ <div class="status off" id="status"><i></i><span>Connecting</span></div>
+</header>
+<div class="cols">
+ <div class="col">
+  <section class="card">
+   <h2><span class="ic" style="background:#a78bfa22"><svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1.5" fill="#a78bfa"/><circle cx="12" cy="7.5" r="1.5" fill="#a78bfa"/><circle cx="15.5" cy="10" r="1.5" fill="#a78bfa"/></svg></span>Appearance</h2>
+   <div class="field"><span class="lbl">Theme</span>
+    <div class="seg" data-key="theme"><button data-v="midnight">Midnight</button><button data-v="aurora">Aurora</button><button data-v="graphite">Graphite</button><button data-v="paper">Paper</button><button data-v="ink">Ink</button><button data-v="newsprint">News</button></div></div>
+   <div class="field"><span class="lbl">Accent</span><div class="swatches" id="swatches"></div></div>
+   <div class="field"><div class="row"><label>Agent text</label><div class="seg small" data-key="agent_text"><button data-v="small">Small</button><button data-v="medium">Medium</button><button data-v="large">Large</button></div></div></div>
+   <div class="field"><div class="row"><label>Temperature</label><div class="seg small" data-key="temp_unit"><button data-v="C">°C</button><button data-v="F">°F</button></div></div>
+    <div class="row"><label>24-hour clock</label><label class="switch"><input type="checkbox" data-key="clock_24h"><span></span></label></div></div>
+   <div class="field"><label class="lbl" for="tz">Time zone</label><select id="tz"></select></div>
+   <div class="field"><span class="lbl">Start page</span>
+    <div class="seg" data-key="page"><button data-v="overview">Overview</button><button data-v="agents">Agents</button><button data-v="system">System</button></div></div>
+  </section>
+  <section class="card">
+   <h2><span class="ic" style="background:#fbbf2422"><svg viewBox="0 0 24 24" fill="#fbbf24"><circle cx="12" cy="12" r="5"/><g stroke="#fbbf24" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg></span>Display</h2>
+   <div class="field"><div class="row"><label for="brightness">Brightness</label><span class="val" id="brightness-v"></span></div><input type="range" id="brightness" min="5" max="100"></div>
+   <div class="field"><div class="row"><label for="dim_brightness">Dim to, when no PC is active</label><span class="val" id="dim_brightness-v"></span></div><input type="range" id="dim_brightness" min="0" max="100"></div>
+   <div class="field"><span class="lbl">Dim after</span>
+    <div class="seg" data-key="dim_after" data-num="1"><button data-v="15">15 s</button><button data-v="30">30 s</button><button data-v="60">1 min</button><button data-v="300">5 min</button><button data-v="86400">Never</button></div></div>
+   <div class="field"><div class="row"><label>Wake up when an agent needs you</label><label class="switch"><input type="checkbox" data-key="wake_on_alert"><span></span></label></div>
+    <div class="row"><label>Jump to Agents when one needs you</label><label class="switch"><input type="checkbox" data-key="auto_page"><span></span></label></div></div>
+  </section>
+ </div>
+ <div class="col">
+  <section class="card">
+   <h2><span class="ic" style="background:#38bdf822"><svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M9 20h6M12 16v4"/></svg></span>PCs</h2>
+   <div id="pcs"></div>
+   <div class="field" style="margin-top:14px"><span class="lbl">Switching</span>
+    <div class="seg" data-key="failover"><button data-v="auto">Automatic</button><button data-v="manual">Manual</button></div>
+    <p class="hint">Automatic: when the PC on screen goes quiet, the next one that's online takes over. A pinned PC always wins when it's online.</p></div>
+  </section>
+  <section class="card">
+   <h2><span class="ic" style="background:#34d39922"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></span>Device</h2>
+   <div class="field"><label class="lbl" for="name">Name</label><input type="text" id="name" maxlength="31"></div>
+   <div class="field"><div class="kv" id="kv"></div></div>
+   <div class="field"><span class="lbl">Firmware update</span>
+    <div class="drop" id="drop"><b>Choose a .bin</b> or drop it here<input type="file" id="fw" accept=".bin" class="hidden"></div>
+    <div class="bar hidden" id="fw-bar"><i></i></div><div class="hint" id="fw-msg"></div></div>
+   <div class="field"><div class="btns"><button class="btn" id="identify">Identify</button><button class="btn" id="reboot">Restart</button></div></div>
+  </section>
+ </div>
+</div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const ACCENTS=["#7aa2f7","#a78bfa","#f472b6","#fb7185","#fb923c","#facc15","#34d399","#22d3ee"];
+const ZONES=[["Automatic (from the PC)","auto"],["India (IST)","IST-5:30"],["UTC","UTC0"],["London","GMT0BST,M3.5.0/1,M10.5.0"],["Berlin / Paris","CET-1CEST,M3.5.0,M10.5.0/3"],
+ ["New York","EST5EDT,M3.2.0,M11.1.0"],["Chicago","CST6CDT,M3.2.0,M11.1.0"],["Denver","MST7MDT,M3.2.0,M11.1.0"],["Los Angeles","PST8PDT,M3.2.0,M11.1.0"],
+ ["Dubai","<+04>-4"],["Singapore","<+08>-8"],["Tokyo","JST-9"],["Sydney","AEST-10AEDT,M10.1.0,M4.1.0/3"]];
+const DEMO=location.search.includes("demo");
+let ws,settings={},device={},token=localStorage.getItem("dh_token")||"",ready=false,lastRx=0,retry=500;
+let pcId=localStorage.getItem("dh_pc")||(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2));
+localStorage.setItem("dh_pc",pcId);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2200)}
+function gate(title,text,code){$("#gate").classList.toggle("hidden",!title);if(!title)return;$("#gate-title").textContent=title;$("#gate-text").textContent=text||"";
+ $("#gate-code").classList.toggle("hidden",!code);$("#gate-code").textContent=code?code.slice(0,3)+" "+code.slice(3):""}
+function status(ok,text){$("#status").classList.toggle("off",!ok);$("#status span").textContent=text}
+function send(o){if(ws&&ws.readyState===1)ws.send(JSON.stringify(o))}
+function set(k,v){settings[k]=v;render();send({t:"set",settings:{[k]:v}})}
+function lum(hex){const n=parseInt(hex.slice(1),16);return(0.299*(n>>16)+0.587*(n>>8&255)+0.114*(n&255))/255}
+
+function render(){
+ const s=settings,acc=s.accent||"#7aa2f7";
+ document.documentElement.style.setProperty("--accent",acc);
+ document.documentElement.style.setProperty("--on-accent",lum(acc)>.6?"#0b0f1a":"#fff");
+ for(const k of["brightness","dim_brightness"]){const el=$("#"+k);if(document.activeElement!==el&&s[k]!=null)el.value=s[k];paint(el)}
+ $$(".seg[data-key]").forEach(seg=>{const k=seg.dataset.key;let v=s[k];
+  if(k==="dim_after")v=[15,30,60,300,86400].find(o=>s.dim_after<=o)||86400;
+  seg.querySelectorAll("button").forEach(b=>b.classList.toggle("on",String(b.dataset.v)===String(v)))});
+ $$("input[type=checkbox][data-key]").forEach(i=>i.checked=!!s[i.dataset.key]);
+ const tz=$("#tz");if(document.activeElement!==tz){const known=ZONES.some(z=>z[1]===s.tz);
+  tz.innerHTML=ZONES.map(([n,v])=>`<option value="${esc(v)}">${n}</option>`).join("")+(known||!s.tz?"":`<option value="${esc(s.tz)}">Custom (${esc(s.tz)})</option>`);tz.value=s.tz||"auto"}
+ if(document.activeElement!==$("#name"))$("#name").value=s.name||"";
+ const custom=!ACCENTS.includes(acc);
+ $("#swatches").innerHTML=ACCENTS.map(c=>`<button class="swatch ${c===acc?"on":""}" style="background:${c}" data-c="${c}" title="${c}"></button>`).join("")+
+  `<label class="swatch custom ${custom?"on":""}" title="Custom color"><input type="color" id="accent-pick" value="${acc}"></label>`;
+ $("#accent-pick").onchange=e=>set("accent",e.target.value);
+ $("#dev-name").textContent=s.name||device.name||"DeskHUD";
+ $("#dev-sub").textContent=[device.hostname&&device.hostname+".local",device.ip,device.fw&&"firmware "+device.fw].filter(Boolean).join("  ·  ")||" ";
+ const up=device.uptime||0,d=Math.floor(up/86400),h=Math.floor(up/3600)%24,m=Math.floor(up/60)%60;
+ $("#kv").innerHTML=[["Wi-Fi",device.ssid?`${esc(device.ssid)} · ${device.rssi} dBm`:"–"],["Address",esc(device.ip)],["Uptime",d?`${d}d ${h}h`:`${h}h ${m}m`],
+  ["Free memory",`${Math.round((device.heap||0)/1024)} KB · PSRAM ${((device.psram||0)/1048576).toFixed(1)} MB`],["Firmware",`${esc(device.fw)} · IDF ${esc(device.idf)}`]]
+  .map(([k,v])=>`<span>${k}</span><b title="${v}">${v??"–"}</b>`).join("");
+ const pcs=(device.pcs||[]).filter(p=>p.pc_id!==pcId);
+ $("#pcs").innerHTML=pcs.length?pcs.map(p=>{const pinned=p.pc_id===s.pinned_pc;
+  return `<div class="pc"><span class="dot ${p.online?"on":""}"></span><div class="name"><b>${esc(p.host)}</b><small class="${p.active?"live":""}">${p.active?"On screen":p.online?"Online · standby":"Offline"}${pinned?" · pinned":""}</small></div>
+  <div class="btns">${p.online&&!p.active?`<button class="btn" data-act="show" data-id="${p.pc_id}">Show</button>`:""}
+  <button class="btn" data-act="${pinned?"unpin":"pin"}" data-id="${p.pc_id}">${pinned?"Unpin":"Pin"}</button>
+  <button class="btn danger" data-act="forget" data-id="${p.pc_id}">Forget</button></div></div>`}).join(""):`<p class="hint">No PCs paired yet. Run <code>deskhud install</code> on a PC on this network and tap Allow on the display.</p>`;
+}
+function paint(el){const p=(el.value-el.min)/(el.max-el.min)*100;el.style.setProperty("--p",p+"%");
+ $("#"+el.id+"-v").textContent=el.id==="dim_brightness"&&!+el.value?"Off":el.value+"%"}
+
+// Connection: the page stays usable while reconnecting; only pairing takes over the screen.
+function connect(){
+ if(DEMO)return;
+ ws=new WebSocket(`ws://${location.host}/ws`);
+ ws.onopen=()=>{retry=500;send({t:"hello",proto:1,pc_id:pcId,host:"Web browser",os:navigator.platform||"browser",token,role:"control"})};
+ ws.onmessage=e=>{lastRx=Date.now();const m=JSON.parse(e.data);
+  if(m.t==="pair_pending"){status(false,"Waiting for approval");gate("Approve on the display","Tap Allow on the display to let this browser change its settings.",m.code)}
+  else if(m.t==="pair_result"){if(m.ok){token=m.token;localStorage.setItem("dh_token",token);send({t:"get"})}else gate("Not allowed","The display declined. Reload the page to ask again.")}
+  else if(m.t==="welcome"){device=m.device||device;settings=m.settings||settings;ready=true;gate();status(true,"Connected");render();send({t:"get"})}
+  else if(m.t==="settings"){settings=m.settings;render()}
+  else if(m.t==="device"){device=m.device;render()}
+  else if(m.t==="error")toast(m.msg)};
+ ws.onclose=()=>{ws=null;status(false,"Reconnecting");if(!ready)gate("Connecting…","Reaching the display.");
+  setTimeout(connect,retry);retry=Math.min(retry*2,5000)};
+}
+setInterval(()=>{if(!ws||ws.readyState!==1)return;
+ if(lastRx&&Date.now()-lastRx>12000){ws.close();return}  // silently dead: start over
+ send({t:"ping"});send({t:"get"})},4000);
+
+for(const k of["brightness","dim_brightness"]){const el=$("#"+k);el.oninput=()=>paint(el);el.onchange=()=>set(k,+el.value)}
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+ const seg=b.closest(".seg[data-key]");if(seg){set(seg.dataset.key,seg.dataset.num?+b.dataset.v:b.dataset.v);return}
+ if(b.dataset.c){set("accent",b.dataset.c);return}
+ const act=b.dataset.act,id=b.dataset.id;
+ if(act==="show")send({t:"cmd",cmd:"activate",arg:id});
+ if(act==="pin")send({t:"cmd",cmd:"pin",arg:id});
+ if(act==="unpin")send({t:"cmd",cmd:"unpin"});
+ if(act==="forget"&&confirm("Forget this PC? It will need approval on the display again."))send({t:"cmd",cmd:"forget",arg:id});
+ if(act)setTimeout(()=>send({t:"get"}),300)});
+$$("input[type=checkbox][data-key]").forEach(i=>i.onchange=()=>set(i.dataset.key,i.checked));
+$("#tz").onchange=e=>set("tz",e.target.value);
+$("#name").onchange=e=>e.target.value.trim()&&set("name",e.target.value.trim());
+$("#identify").onclick=()=>{send({t:"cmd",cmd:"identify"});toast("Showing the name on the display")};
+$("#reboot").onclick=()=>confirm("Restart the display?")&&send({t:"cmd",cmd:"reboot"});
+const drop=$("#drop");drop.onclick=()=>$("#fw").click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add("over")};drop.ondragleave=()=>drop.classList.remove("over");
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove("over");upload(e.dataTransfer.files[0])};
+$("#fw").onchange=()=>upload($("#fw").files[0]);
+function upload(f){if(!f)return;
+ if(!confirm(`Install ${f.name} (${Math.round(f.size/1024)} KB)? The display restarts when done.`))return;
+ const x=new XMLHttpRequest();x.open("POST","/api/ota");x.setRequestHeader("Authorization","Bearer "+token);x.setRequestHeader("X-DeskHUD-Host","Web browser");
+ $("#fw-bar").classList.remove("hidden");
+ x.upload.onprogress=e=>{if(e.lengthComputable){const p=Math.round(100*e.loaded/e.total);$("#fw-bar i").style.width=p+"%";$("#fw-msg").textContent=`Uploading… ${p}%`}};
+ x.onload=()=>{$("#fw-msg").textContent=x.status===200?"Installed. The display is restarting…":"Update failed: "+x.responseText};
+ x.onerror=()=>{$("#fw-msg").textContent="Upload failed"};x.send(f)}
+
+if(DEMO&&window.DEMO_DATA){ready=true;gate();status(true,"Connected");settings=DEMO_DATA.settings;device=DEMO_DATA.device;render()}
+else if(DEMO){ready=true;gate();status(true,"Connected");
+ settings={name:"DeskHUD",brightness:86,dim_brightness:30,dim_after:86400,wake_on_alert:true,auto_page:true,accent:"#facc15",theme:"aurora",temp_unit:"C",clock_24h:true,agent_text:"large",tz:"IST-5:30",page:"overview",failover:"auto",pinned_pc:""};
+ device={name:"DeskHUD",hostname:"deskhud-1a2b3c",ip:"192.168.1.40",fw:"0.1.0",idf:"v5.5.5",ssid:"home",rssi:-61,heap:26800,psram:1750000,uptime:7380,
+  pcs:[{pc_id:"a",host:"workstation",online:true,active:true},{pc_id:"b",host:"studio-laptop",online:true,active:false},{pc_id:"c",host:"build-box",online:false,active:false}]};
+ render()}
+connect();
+</script>
+</body>
+</html>
